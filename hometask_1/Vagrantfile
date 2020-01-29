@@ -1,0 +1,21 @@
+Vagrant.configure("2") do |config|
+
+  config.vm.define "ubuntu" do |ubuntu|
+    ubuntu.vm.network :forwarded_port, guest: 80, host: 8080
+    ubuntu.vm.box = "ubuntu/bionic64"
+    ubuntu.vm.provision "shell", inline: "sudo apt-get install apache2 -y; service apache2 start"
+  end
+
+  config.vm.define "centos" do |centos|
+    centos.vm.network :forwarded_port, guest: 80, host: 8081
+    centos.vm.box = "centos/7"
+    centos.vm.provision "shell", inline: $centos_apache    
+  end
+
+end
+
+  $centos_apache = <<-SCRIPT
+    sudo yum install -y httpd
+    sudo systemctl enable httpd.service
+    sudo systemctl restart httpd.service
+  SCRIPT
