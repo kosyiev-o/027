@@ -6,5 +6,5 @@ files=$(find . -maxdepth 1 -mtime -1 -not -name .)
 mkdir $2/$(date +%Y%m%d)
 for source in $files
 do
-	cp -R $source $2/$(date +%Y%m%d) #and we can copy hidden files too
+	cp -R $source $2/$(date +%Y%m%d)
 done
