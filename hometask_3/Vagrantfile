@@ -17,8 +17,7 @@ end
   $mysql_install = <<-SCRIPT
     apt -y update
     DEBIAN_FRONTEND=noninteractive apt-get -y install mysql-server     #install mysql-server in silent mode
-    echo "SET PASSWORD FOR 'root'@'localhost' = PASSWORD('123456');    #set password for root
-quit" | mysql
+    echo "SET PASSWORD FOR 'root'@'localhost' = '12346';" | mysql
     echo "CREATE DATABASE CONFLUENSE;" | mysql                         #create new DB
   SCRIPT
 
