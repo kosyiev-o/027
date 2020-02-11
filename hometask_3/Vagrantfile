@@ -18,8 +18,8 @@ end
     apt -y update
     DEBIAN_FRONTEND=noninteractive apt-get -y install mysql-server     #install mysql-server in silent mode
     echo "UPDATE mysql.user SET Host='%' where User='root'; flush privileges;" | mysql
-    echo "SET PASSWORD FOR 'root'@'%' = '12346';" | mysql
     echo "CREATE DATABASE CONFLUENSE;" | mysql                         #create new DB
+    echo "ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY '123456';" | mysql
     sed -i "s/.*bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/my.cnf && \
   sed -i "s/.*bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/mysql.conf.d/mysqld.cnf
     service mysql restart
@@ -30,13 +30,14 @@ end
     apt install -y default-jre
     wget https://www.atlassian.com/software/confluence/downloads/binary/atlassian-confluence-7.3.1-x64.bin
     mkdir /var/confluence_home
+    mkdir /opt/atlassian
     echo "app.confHome=/var/confluence_home				#set configuration for confluence installation
 app.install.service$Boolean=true
 portChoice=default
 launch.application$Boolean=true
 sys.adminRights$Boolean=true
 sys.confirmedUpdateInstallationString=false
-sys.installationDir=/opt/atlassian/confluence6_15_5
+sys.installationDir=/opt/atlassian
 sys.languageId=en" >> response.varfile
     chmod +x atlassian-confluence-7.3.1-x64.bin
     ./atlassian-confluence-7.3.1-x64.bin -q -varfile response.varfile
