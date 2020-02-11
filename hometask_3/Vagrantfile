@@ -2,8 +2,8 @@ Vagrant.configure("2") do |config|
 
   config.vm.define "ubuntu" do |ubuntu|
     ubuntu.vm.box = "ubuntu/bionic64"
-    ubuntu.vm.network :forwarded_port, guest: 8090, host: 8080
-    ubuntu.vm.network :forwarded_port, guest: 3306, host: 3306
+    ubuntu.vm.network :forwarded_port, guest: 8090, host: 8080, host_ip: "127.0.0.1"
+    ubuntu.vm.network :forwarded_port, guest: 3306, host: 3306, host_ip: "127.0.0.1"
     ubuntu.vm.provision "shell", inline: $mysql_install
     ubuntu.vm.provision "shell", inline: $confluence_install
     ubuntu.vm.provider "virtualbox" do |vb|
@@ -19,12 +19,16 @@ end
     DEBIAN_FRONTEND=noninteractive apt-get -y install mysql-server     #install mysql-server in silent mode
     echo "SET PASSWORD FOR 'root'@'localhost' = '12346';" | mysql
     echo "CREATE DATABASE CONFLUENSE;" | mysql                         #create new DB
+    sed -i "s/.*bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/my.cnf && \
+  sed -i "s/.*bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/mysql.conf.d/mysqld.cnf
+    echo "UPDATE mysql.user SET Host='%' where User='root'; flush privileges;" | mysql
+    service mysql restart
   SCRIPT
 
   $confluence_install = <<-SCRIPT
     apt -y update
     apt install -y default-jre
-    #wget https://www.atlassian.com/software/confluence/downloads/binary/atlassian-confluence-7.3.1-x64.bin
+    wget https://www.atlassian.com/software/confluence/downloads/binary/atlassian-confluence-7.3.1-x64.bin
     mkdir /var/confluence-home
     echo "app.confHome=/var/confluence_home				#set configuration for confluence installation
 app.install.service$Boolean=true
