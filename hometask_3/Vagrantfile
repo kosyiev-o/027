@@ -17,11 +17,11 @@ end
   $mysql_install = <<-SCRIPT
     apt -y update
     DEBIAN_FRONTEND=noninteractive apt-get -y install mysql-server     #install mysql-server in silent mode
-    echo "SET PASSWORD FOR 'root'@'localhost' = '12346';" | mysql
+    echo "UPDATE mysql.user SET Host='%' where User='root'; flush privileges;" | mysql
+    echo "SET PASSWORD FOR 'root'@'%' = '12346';" | mysql
     echo "CREATE DATABASE CONFLUENSE;" | mysql                         #create new DB
     sed -i "s/.*bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/my.cnf && \
   sed -i "s/.*bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/mysql.conf.d/mysqld.cnf
-    echo "UPDATE mysql.user SET Host='%' where User='root'; flush privileges;" | mysql
     service mysql restart
   SCRIPT
 
@@ -29,7 +29,7 @@ end
     apt -y update
     apt install -y default-jre
     wget https://www.atlassian.com/software/confluence/downloads/binary/atlassian-confluence-7.3.1-x64.bin
-    mkdir /var/confluence-home
+    mkdir /var/confluence_home
     echo "app.confHome=/var/confluence_home				#set configuration for confluence installation
 app.install.service$Boolean=true
 portChoice=default
