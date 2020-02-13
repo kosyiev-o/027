@@ -20,3 +20,7 @@ docker login --username=kosyiev --password=f18f6908-df0c-4512-8a81-478938d54d6a
 docker tag mysql_serv kosyiev/027:sql
 docker push kosyiev/027:sql
 #for getting access to mysql_server on VM: docker exec -it mysql_serv mysql -uroot -p
+
+cd /home/vagrant/wordpress/
+docker build -t wp_engine .
+docker run --name wp_engine -d --link mysql_serv:mysql -p 80:80 wp_engine
