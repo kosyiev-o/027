@@ -33,4 +33,6 @@ docker ps -a | xargs docker stop
 
 #build docker-compose containers with pulled own docker images for checking
 docker-compose up -d
+echo "PLEASE, WAIT A FEW SECONDS BEFORE CHECKING THE LOCALHOST CONNECTION"
+echo "If you want to access http://localhost:8080 - you will be automatically redirected to https://localhost:443" 
 

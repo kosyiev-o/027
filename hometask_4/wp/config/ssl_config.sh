@@ -17,7 +17,7 @@ a2enmod ssl
 cp /var/www/html/my_config/default-ssl.conf /etc/apache2/sites-available/default-ssl.conf
 cp /var/www/html/my_config/000-default.conf /etc/apache2/sites-available/000-default.conf
 cp /var/www/html/my_config/apache2.conf /etc/apache2/apache2.conf
-cp /var/www/html/my_config/wp-config.php /var/www/html/
+cp /var/www/html/my_config/wp-config.php /var/www/html/ #configuration db file for wordpress 
 cd /etc/apache2/sites-available/
 a2ensite default-ssl.conf
 service apache2 restart
